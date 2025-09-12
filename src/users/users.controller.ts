@@ -9,7 +9,7 @@ import {
   Put,
   ParseIntPipe,
 } from '@nestjs/common';
-import { CreateDTO, UpdateDTO } from './user.dto';
+import { CreateUserDTO, UpdateUserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -24,13 +24,13 @@ export class UsersController {
   getUser() {
     return this.usersService.findAll();
   }
-
+  @Get(':id')
   findUser(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.getUserById(id);
   }
 
   @Post()
-  crearUserIDAuto(@Body() body: CreateDTO) {
+  crearUserIDAuto(@Body() body: CreateUserDTO) {
     return this.usersService.create(body);
   }
 
@@ -42,8 +42,13 @@ export class UsersController {
   @Put(':id') //Modificar el usuario - Retonar todo el usuario modificado
   updateUser(
     @Param('id', ParseIntPipe) id: number,
-    @Body() changes: UpdateDTO,
+    @Body() changes: UpdateUserDto,
   ) {
     return this.usersService.update(id, changes);
+  }
+
+  @Get(':id/profile')
+  getProfile(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.getProfileByUserID(id);
   }
 }
